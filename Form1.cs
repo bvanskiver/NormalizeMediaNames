@@ -111,6 +111,7 @@ namespace NormalizeMediaNames
                 if (file.Exists)
                 {
                     file.MoveTo(Path.Combine(di.FullName, item.SubItems[1].Text));
+                    File.SetLastWriteTime(file.FullName, DateTime.Parse(Path.GetFileNameWithoutExtension(item.SubItems[1].Text).Replace(".", ":")));
                 }
             }
 
