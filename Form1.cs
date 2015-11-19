@@ -49,6 +49,18 @@ namespace NormalizeMediaNames
                                     .AddHours(int.Parse(this.textBox2.Text)), // Offset the time zone
                                  ".mp4"));
                         }
+                        if (Regex.IsMatch(file.Name, @"^\d{4}-\d{2}-\d{2} \d{2}\.\d{2}\.\d{2}\.mov")) // 2015-02-15 11.09.45.mp4
+                        {
+                            files.Add(new MediaFile(file.Name,
+                                new DateTime(int.Parse(file.Name.Substring(0, 4)), // Year
+                                    int.Parse(file.Name.Substring(5, 2)), // Month
+                                    int.Parse(file.Name.Substring(8, 2)), // Day
+                                    int.Parse(file.Name.Substring(11, 2)), // Hour
+                                    int.Parse(file.Name.Substring(14, 2)), // Minute
+                                    int.Parse(file.Name.Substring(17, 2))) // Second
+                                    .AddHours(int.Parse(this.textBox2.Text)), // Offset the time zone
+                                 ".mov"));
+                        }
                         else if (Regex.IsMatch(file.Name, @"VID_\d{8}_\d{6}.mp4")) // VID_20150711_101346.mp4  IMG_20150704_090600.jpg
                         {
                             files.Add(new MediaFile(file.Name,
