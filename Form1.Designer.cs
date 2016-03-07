@@ -71,6 +71,7 @@
             this.textBox2.Size = new System.Drawing.Size(27, 20);
             this.textBox2.TabIndex = 11;
             this.textBox2.Text = "-6";
+            this.textBox2.Visible = false;
             // 
             // label1
             // 
@@ -81,6 +82,7 @@
             this.label1.Size = new System.Drawing.Size(84, 13);
             this.label1.TabIndex = 10;
             this.label1.Text = "Timezone Offset";
+            this.label1.Visible = false;
             // 
             // button1
             // 

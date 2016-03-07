@@ -37,31 +37,7 @@ namespace NormalizeMediaNames
 
                     foreach (var file in di.GetFiles())
                     {
-                        if (Regex.IsMatch(file.Name, @"^\d{4}-\d{2}-\d{2} \d{2}\.\d{2}\.\d{2}\.mp4")) // 2015-02-15 11.09.45.mp4
-                        {
-                            files.Add(new MediaFile(file.Name,
-                                new DateTime(int.Parse(file.Name.Substring(0, 4)), // Year
-                                    int.Parse(file.Name.Substring(5, 2)), // Month
-                                    int.Parse(file.Name.Substring(8, 2)), // Day
-                                    int.Parse(file.Name.Substring(11, 2)), // Hour
-                                    int.Parse(file.Name.Substring(14, 2)), // Minute
-                                    int.Parse(file.Name.Substring(17, 2))) // Second
-                                    .AddHours(int.Parse(this.textBox2.Text)), // Offset the time zone
-                                 ".mp4"));
-                        }
-                        if (Regex.IsMatch(file.Name, @"^\d{4}-\d{2}-\d{2} \d{2}\.\d{2}\.\d{2}\.mov")) // 2015-02-15 11.09.45.mp4
-                        {
-                            files.Add(new MediaFile(file.Name,
-                                new DateTime(int.Parse(file.Name.Substring(0, 4)), // Year
-                                    int.Parse(file.Name.Substring(5, 2)), // Month
-                                    int.Parse(file.Name.Substring(8, 2)), // Day
-                                    int.Parse(file.Name.Substring(11, 2)), // Hour
-                                    int.Parse(file.Name.Substring(14, 2)), // Minute
-                                    int.Parse(file.Name.Substring(17, 2))) // Second
-                                    .AddHours(int.Parse(this.textBox2.Text)), // Offset the time zone
-                                 ".mov"));
-                        }
-                        else if (Regex.IsMatch(file.Name, @"VID_\d{8}_\d{6}.mp4")) // VID_20150711_101346.mp4  IMG_20150704_090600.jpg
+                        if (Regex.IsMatch(file.Name, @"VID_\d{8}_\d{6}.mp4")) // VID_20150711_101346.mp4  IMG_20150704_090600.jpg
                         {
                             files.Add(new MediaFile(file.Name,
                                 new DateTime(int.Parse(file.Name.Substring(4, 4)), // Year
@@ -82,6 +58,14 @@ namespace NormalizeMediaNames
                                     int.Parse(file.Name.Substring(15, 2)), // Minute
                                     int.Parse(file.Name.Substring(17, 2))), // Second
                                  ".jpg"));
+                        }
+                        else if (Regex.IsMatch(file.Name, @"IMG_\d{4}.JPG")) // IMG_2326.JPG
+                        {
+                            files.Add(new MediaFile(file.Name, file.LastWriteTime, ".jpg"));
+                        }
+                        else if (Regex.IsMatch(file.Name, @"MVI_\d{4}.MOV")) // MVI_2334.MOV
+                        {
+                            files.Add(new MediaFile(file.Name, file.LastWriteTime, ".mov"));
                         }
                     }
 
@@ -123,7 +107,10 @@ namespace NormalizeMediaNames
                 if (file.Exists)
                 {
                     file.MoveTo(Path.Combine(di.FullName, item.SubItems[1].Text));
-                    File.SetLastWriteTime(file.FullName, DateTime.Parse(Path.GetFileNameWithoutExtension(item.SubItems[1].Text).Replace(".", ":")));
+
+                    var date = DateTime.Parse(Path.GetFileNameWithoutExtension(item.SubItems[1].Text).Replace(".", ":"));
+                    if (file.LastWriteTime != date)
+                        File.SetLastWriteTime(file.FullName, date);
                 }
             }
 
