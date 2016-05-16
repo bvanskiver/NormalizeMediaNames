@@ -1,13 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace NormalizeMediaNames
@@ -18,19 +12,19 @@ namespace NormalizeMediaNames
         {
             InitializeComponent();
 
-            this.textBox1.Text = Environment.CurrentDirectory;
-            this.textBox2.Text = TimeZone.CurrentTimeZone.GetUtcOffset(DateTime.Now).Hours.ToString();
+            textBox1.Text = Environment.CurrentDirectory;
+            textBox2.Text = TimeZone.CurrentTimeZone.GetUtcOffset(DateTime.Now).Hours.ToString();
 
-            this.GetFiles();
+            GetFiles();
         }
 
         private void GetFiles()
         {
-            this.listView1.Items.Clear();
+            listView1.Items.Clear();
 
-            if (!string.IsNullOrEmpty(this.textBox1.Text))
+            if (!string.IsNullOrEmpty(textBox1.Text))
             {
-                DirectoryInfo di = new DirectoryInfo(this.textBox1.Text);
+                var di = new DirectoryInfo(textBox1.Text);
                 if (di.Exists)
                 {
                     var files = new List<MediaFile>();
@@ -71,24 +65,24 @@ namespace NormalizeMediaNames
 
                     foreach (var file in files)
                     {
-                        this.listView1.Items.Add(new ListViewItem(new[] { file.OriginalName, file.Name }));
+                        listView1.Items.Add(new ListViewItem(new[] { file.OriginalName, file.Name }));
                     }
                 }
             }
 
-            this.listView1.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
-            this.listView1.Columns[0].Width += 10;
-            this.listView1.Columns[1].Width += 10;
+            listView1.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
+            listView1.Columns[0].Width += 10;
+            listView1.Columns[1].Width += 10;
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            this.folderBrowserDialog1.SelectedPath = this.textBox1.Text;
+            folderBrowserDialog1.SelectedPath = textBox1.Text;
 
-            if (this.folderBrowserDialog1.ShowDialog() == DialogResult.OK)
+            if (folderBrowserDialog1.ShowDialog() == DialogResult.OK)
             {
-                this.textBox1.Text = this.folderBrowserDialog1.SelectedPath;
-                this.GetFiles();
+                textBox1.Text = folderBrowserDialog1.SelectedPath;
+                GetFiles();
             }
         }
 
@@ -99,11 +93,11 @@ namespace NormalizeMediaNames
 
         private void ApplyButton_Click(object sender, EventArgs e)
         {
-            DirectoryInfo di = new DirectoryInfo(this.textBox1.Text);
+            var di = new DirectoryInfo(textBox1.Text);
 
-            foreach (ListViewItem item in this.listView1.Items)
+            foreach (ListViewItem item in listView1.Items)
             {
-                FileInfo file = new FileInfo(Path.Combine(di.FullName, item.SubItems[0].Text));
+                var file = new FileInfo(Path.Combine(di.FullName, item.SubItems[0].Text));
                 if (file.Exists)
                 {
                     file.MoveTo(Path.Combine(di.FullName, item.SubItems[1].Text));
@@ -114,7 +108,7 @@ namespace NormalizeMediaNames
                 }
             }
 
-            MessageBox.Show("Done");
+            Application.Exit();
         }
     }
 }
