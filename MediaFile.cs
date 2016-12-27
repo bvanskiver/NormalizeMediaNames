@@ -19,11 +19,20 @@ namespace NormalizeMediaNames
 
         public string Name
         {
-            get { return this.Date.ToString("yyy-MM-dd HH.mm.ss") + this.Extension; }
+            get
+            {
+                var suffix = string.Empty;
+                if (NameIncrement > 0)
+                    suffix = $"-{NameIncrement}";
+
+                return $"{Date:yyy-MM-dd HH.mm.ss}{suffix}{Extension}";
+            }
         }
 
         public DateTime Date { get; set; }
 
         public string Extension { get; set; }
+
+        public int NameIncrement { get; set; }
     }
 }
